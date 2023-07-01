@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.select import Select
 import time
 
 URL = 'https://ticketmaster.sg/activity/detail/23_charlieputh'
@@ -18,6 +19,10 @@ def clickSeat(driver, xpath):
     button = wait.until(EC.visibility_of_element_located((By.XPATH, xpath)))
     driver.execute_script("arguments[0].scrollIntoView();", button)
     button.click()
+
+def selectQuantity(driver, xpath, option_value):
+    select = Select(driver.find_element(By.XPATH, xpath))
+    select.select_by_value(option_value)
 
 def main():
     options = Options()
@@ -36,9 +41,11 @@ def main():
     # Seat 225
     clickSeat(driver, '//*[@id="field_225"]')
     
+    # Select Quantity
+    selectQuantity(driver, "//select[@id='TicketForm_ticketPrice_005']", "1")
 
-    # time.sleep(60)
-
-    # driver.quit()
+    # Best Available
+    clickButton(driver, '//*[@id="autoMode"]')
+    
 if __name__ == "__main__":
     main()
